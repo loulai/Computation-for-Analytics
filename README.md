@@ -1,5 +1,5 @@
 # Computation for Analytics (MSAN 501)
-## University of San Francisco
+### Master's of Data Science at the University of San Francisco
 
 The course Computation for Analytics was completed as part of the curriculum for the University of San Francisco's Masters of Science in Data Science.
 
