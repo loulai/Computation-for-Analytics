@@ -1,0 +1,25 @@
+---
+title: "assignmentOne"
+author: "Louise Lai"
+date: "July 15, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+courseNum <- c("593", "501", "504", "502")
+courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics")
+courseProf <- c("Paul Intrevado", "Terrence Parr", "Jeff Hamrick", "Xuemei Chen") 
+enrolled <- c(1, 1, 1, 0)
+anticipatedGrade <- c("A", "A", "B", NA)
+anticipatedHours <- c(15, 10, 15, NA)
+```
+
+
+```{r}
+titanicData <- read.csv("titanic.csv", na='\\N')
+```
+
