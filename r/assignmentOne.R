@@ -109,12 +109,62 @@ samples <- sample(runIfVector, 100000)
 set.seed(100)
 x_1 <- runif(100000, -100, 100)
 y_1 <- rexp(100000,  rate = 0.5)
-
 x_hat <- mean(x_1)
 y_hat <- mean(y_1)
 
-rFunction <- lm(y_1 ~ x_1, data.frame(x_1, y_1))
+# calculate b1 (slope)
+numerator = 0.0
+denominator = 0.0
+for (i in 1:length(x_1)){
+  numerator = numerator + ( (x_1[i] - x_hat) * (y_1[i] - y_hat) ) # 8064.517
+  denominator = denominator + ( (x_1[i]-x_hat)**2 ) # 333564449
+}
+numerator
+denominator
+
+b1 = numerator/denominator # 2.417679e-05
+b1
+# calculate b0 (intercept)
+b0 = (sum(y_1) - b1*sum(x_1))/length(x_1) # 1.995036
+b0
+
+# Proof through R's package
+rFunction <- lm(y_1 ~ x_1, data.frame(x_1, y_1)) # intercept = 1.995e+00, 2.418e-05
 summary(rFunction)
+plot(resid(rFunction) ~ fitted(rFunction))
+plot(x_1, y_1)
+
+# Q4.2
+
+# generate predicted Y values from x values, using regression formula (i.e. coefficients found above)
+predictedY = c()
+for (i in 1:length(x_1)){
+  predictedY[i] = b0 + b1*x_1[i]
+}
+predictedY
+View(predictedY)
+
+# calculate SSE
+SSE = 0.0
+for (i in 1:length(x_1)){
+  SSE = SSE + (y_1[i]- predictedY[i])**2 # y_1 = y actual 
+}
+SSE # 396,806.1
+
+# calculate SSTo
+SSTo = 0.0
+for (i in 1:length(x_1)){
+  SSTo = SSTo + (y_1[i]-y_hat)**2
+} 
+SSTo # 396,806.3
+
+# calculate SSR
+SSR = SSTo - SSE # 0.19497
+SSR
+
+# calucluate R-squared
+rSquared = SSR/SSTo # 4.913584e-07
+rSquared
 # SSE = sum of squares due to error
 # SSR = sum of squares due to regression
 # SSTO = Total sum of squares
