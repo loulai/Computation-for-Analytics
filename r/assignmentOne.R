@@ -165,6 +165,20 @@ SSR
 # calucluate R-squared
 rSquared = SSR/SSTo # 4.913584e-07
 rSquared
-# SSE = sum of squares due to error
-# SSR = sum of squares due to regression
-# SSTO = Total sum of squares
+
+# Q4.3
+plot(x_1, y_1, main="A Beautiful Scatterplot", xlab="x values", ylab="y values", pch=20, cex=0.2)
+abline(b0, b1, col="red")
+
+# Q4.4
+# residuals
+residuals = c()
+for(i in 1:length(x_1)){
+  residuals[i] = y_1[i] - predictedY[i]
+}
+residuals
+
+# Q4.5
+# plot residuals
+plot(x_1, residuals, main="Residuals", xlab="x values", ylab="residuals (ei)", pch=20, cex=0.2)
+abline(0,0, col="red")
