@@ -44,6 +44,9 @@ df <- read.csv("path.csv", na.strings=c("", "anything else you want NA'ed"))
 # generate random number
 sample(1:1000000, 1000000, replace=T)
 
+# generate a sequence of n numbers, from x to y
+seq(x, y, length=n) # e.g. seq(-2, 2, length=100) gives 100 numbers between -2 to 2
+
 # time 
 system.time(function)
 

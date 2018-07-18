@@ -10,3 +10,8 @@ sd.wait() # wait until music finishes before exiting
 
 # To run:
 # $python play.py
+
+kiss, samplerate = sf.read("sounds/Kiss.aiff")
+print(samplerate)
+sd.play(kiss)
+

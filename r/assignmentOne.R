@@ -99,3 +99,22 @@ lines(lowess(deltaMean ~ sampleSize), col="black")
 
 plot(sampleSize, deltaVariance)
 lines(lowess(deltaVariance ~ sampleSize), col="black")
+
+# 3.3
+runIfVector <- rnorm(10000000, 0, 1)
+samples <- sample(runIfVector, 100000)
+# need to generate variances
+
+# Question 4
+set.seed(100)
+x_1 <- runif(100000, -100, 100)
+y_1 <- rexp(100000,  rate = 0.5)
+
+x_hat <- mean(x_1)
+y_hat <- mean(y_1)
+
+rFunction <- lm(y_1 ~ x_1, data.frame(x_1, y_1))
+summary(rFunction)
+# SSE = sum of squares due to error
+# SSR = sum of squares due to regression
+# SSTO = Total sum of squares
