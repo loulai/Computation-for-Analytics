@@ -1,4 +1,4 @@
-# Question 1
+# 1.1)
 # Create the following vectors, populated with information about the four MSAN boot-camp classes, create a table summarizing the type and class for each vector
 courseNum <- c("593", "501", "504", "502")
 courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics", "Linear Algebra")
@@ -16,6 +16,7 @@ myMatrix <- matrix(c(names, types, class), nrow=6, ncol=3, byrow=FALSE)
 colnames(myMatrix) <- c("items", "type", "class")
 View(myMatrix)
 
+# 1.2) 
 # Create a data frame called bootcampDataFrame by combining all of the above vectors and create another table summarizing the type and class for the data frame. Do the data frame variables retain their original types/classes?
 bootcampDataFrame <- data.frame(
   courseNum,
@@ -41,7 +42,8 @@ colnames(myMatrix_2) <- c("items", "type", "class")
 
 # no, character in list turns into type integer and type factor in list
 
-# 3. Combine the vectors from 1.1 into a list called bootcampDataList, where each vector is an element of the list. Assign the names of each element to be the names of the original vectors. Do the elements of the list maintain their original types/classes?
+# 1.3) 
+# Combine the vectors from 1.1 into a list called bootcampDataList, where each vector is an element of the list. Assign the names of each element to be the names of the original vectors. Do the elements of the list maintain their original types/classes?
 bootcampDataList <- list(
   courseNum,
   courseName,
@@ -56,13 +58,13 @@ types_3 <- c()
 class_3 <- c()
 
 for(i in 1:length(names)){
-  types_3[i] <- typeof(bootcampList[[i]])
-  class_3[i] <- class(bootcampList[[i]])
+  types_3[i] <- typeof(bootcampDataList[[i]])
+  class_3[i] <- class(bootcampDataList[[i]])
 }
 
-# they do retain their types from the initial matrix, unlike when we did the dataframe
+# yes, they do retain their types from the initial matrix, unlike when we did the dataframe
 
-# 4. Write code that returns the following values in code chunks using echo = TRUE so that your code as well as your output is displayed after each calculation:
+# 1.4) Write code that returns the following values in code chunks using echo = TRUE so that your code as well as your output is displayed after each calculation:
 # number of hours anticpate spending on coursework, per week
 sum(bootcampDataFrame$anticipatedHours, na.rm=TRUE) #40
 
@@ -81,12 +83,8 @@ bootcampDataFrame$anticipatedGrade
 
 View(bootcampDataFrame)
 
-printf <- function(...) invisible(print(sprintf(...)))
-
-
-# highest anticipated grade
-
-# 5.If you haven't already, convert the anticipatedGrade variable in bootcampDataFrame into an ordinal factor
+# 1.5)
+# If you haven't already, convert the anticipatedGrade variable in bootcampDataFrame into an ordinal factor
 maxGrade <- max(bootcampDataFrame$anticipatedGrade, na.rm=TRUE)
 
 highestCourseName <- toString(bootcampDataFrame[bootcampDataFrame$anticipatedGrade == maxGrade,2])
@@ -95,6 +93,7 @@ highestCourseNum <- bootcampDataFrame[bootcampDataFrame$anticipatedGrade==maxGra
 typeof(highestCourseNum) # works but weird NA stuff
 typeof(highestCourseName)
 
+printf <- function(...) invisible(print(sprintf(...)))
 printf("MSAN %d : %s", highestCourseNum, highestCourseName)
 
 # =================== Question 2
@@ -182,7 +181,7 @@ titanicData$Age[is.na(titanicData$Age)] <- mean(titanicData$Age, na.rm = TRUE)
 sum(is.na(titanicData$Age)) # 0, shows that no NAs left
 
 # ======= Question 3
-# 3.1
+# 3.1 
 distA <- runif(100, -1, 1)
 distA <- runif(100, -1, 1)
 distB <- runif(1000, -1, 1)
@@ -299,12 +298,7 @@ get_rSquared <- function(SSR, SSTo){
 
 print(get_rSquared(get_SSR(get_SSTo(x_1, y_1), get_SSE(x_1, y_1, predictedY)), get_SSTo(x_1, y_1))) # works
 
-# Q4.3
-plot(x_1, y_1, main="A Beautiful Scatterplot", xlab="x values", ylab="y values", pch=20, cex=0.2)
-abline(b0, b1, col="red")
-
-# Q4.4
-# residuals
+# 4.4) Manually compute the residuals for the fitted values.
 get_residuals <- function(x_list, y_list, predictedY){
   residuals = c()
   for(i in 1:length(x_list)){
@@ -313,14 +307,7 @@ get_residuals <- function(x_list, y_list, predictedY){
   return(residuals)
 }
 
-
-# Q4.5
-# plot residuals
-plot(x_1, residuals, main="Residuals", xlab="x values", ylab="residuals (ei)", pch=20, cex=0.2)
-abline(0,0, col="red")
-
-# Q4.5
-#### model 1
+#### Model 1
 set.seed(100)
 x_1 <- runif(100000, -100, 100)
 y_1 <- rexp(100000,  rate = 0.5)
@@ -334,13 +321,16 @@ SSR_1 <- get_SSR(SSTo_1, SSE_1) # 1.0323
 rSquared_1 <- get_rSquared(SSR_1, SSTo_1) # 2.589701e-06
 residuals_1 <- get_residuals(x_1, y_1, predictedY_1) # list
 
+# scatterplot
 plot(x_1, y_1, main="A Beautiful Scatterplot", xlab="x values", ylab="y values", pch=20, cex=0.2)
 abline(b0_1, b1_1, col="red")
 
+# residuals
 plot(x_1, residuals_1, main="Residuals", xlab="x values", ylab="residuals (ei)", pch=20, cex=0.2)
 abline(0,0, col="red")
-#######
 
+
+####### Model 2
 set.seed(999)
 x_2 <- rnorm(100000, -100, 100)
 y_2 <- rexp(100000, rate = 0.5)
@@ -360,7 +350,7 @@ abline(b0_2, b1_2, col="red")
 plot(x_2, residuals_2, main="Residuals", xlab="x values", ylab="residuals (ei)", pch=20, cex=0.2)
 abline(0,0, col="red")
 
-#### 
+####### Model 3
 set.seed(543)
 x_3 <- rnorm(100000, -100, 100)
 y_3 <- rnorm(100000, -100, 100)
@@ -381,6 +371,7 @@ plot(x_3, residuals_3, main="Residuals", xlab="x values", ylab="residuals (ei)",
 abline(0,0, col="red")
 
 
+## Create final table
 summaryTable <- data.frame(
   model <- c("Model 1", "Model 2", "Model 3"),
   b0 <- c(b0_1, b0_2, b0_3),
@@ -396,21 +387,4 @@ colnames(summaryTable) <- c("model", "b0", "b1", "SSE", "SSR", "SSTo", "RSquared
 View(summaryTable)
 
 
-# Proof through R's package
-rFunction_1 <- lm(y_2 ~ x_2, data.frame(x_2, y_2)) # intercept = 1.999e+00, slope = -3.205e-05
-summary(rFunction_1)
-plot(resid(rFunction) ~ fitted(rFunction))
-plot(x_2, y_2)
-
-
-# just a storage of functions
-get_b1 <- function(x_list, y_list)
-  get_b0 <- function(x_list, y_list)
-    get_predicted_y_values <- function(x_list, b0, b1) # might break due to variable overlap b0 b1
-      get_SSE <- function(x_list, y_list, predictedY)
-        get_SSTo <- function(x_list, y_list)
-          get_SSR <- function(SSTo, SSE)
-            get_rSquared <- function(SSR, SSTo)
-              get_residuals <- function(x_list, y_list, predictedY)
-                
   
