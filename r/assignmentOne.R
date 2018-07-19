@@ -106,10 +106,6 @@ samples <- sample(runIfVector, 100000)
 # need to generate variances
 
 # Question 4
-set.seed(100)
-x_1 <- runif(100000, -100, 100)
-y_1 <- rexp(100000,  rate = 0.5)
-
 # calculate b1 (slope)
 get_b1 <- function(x_list, y_list){
   x_hat <- mean(x_list)
@@ -194,7 +190,7 @@ abline(b0, b1, col="red")
 get_residuals <- function(x_list, y_list, predictedY){
   residuals = c()
   for(i in 1:length(x_list)){
-    residuals[i] = (y_list[i] - predictedY[i])**2
+    residuals[i] = y_list[i] - predictedY[i]
   }
   return(residuals)
 }
@@ -206,6 +202,27 @@ plot(x_1, residuals, main="Residuals", xlab="x values", ylab="residuals (ei)", p
 abline(0,0, col="red")
 
 # Q4.5
+#### model 1
+set.seed(100)
+x_1 <- runif(100000, -100, 100)
+y_1 <- rexp(100000,  rate = 0.5)
+
+b1_1 <- get_b1(x_1, y_1) # -3.205058e-05
+b0_1 <- get_b0(x_1, y_1, b1_1) # 1.999032
+predictedY_1 <- get_predicted_y_values(x_1, b0_1, b1_1)
+SSE_1 <- get_SSE(x_1, y_1, predictedY_1) # 398,628.3
+SSTo_1 <- get_SSTo(x_1, y_1) # 398,629.4
+SSR_1 <- get_SSR(SSTo_1, SSE_1) # 1.0323
+rSquared_1 <- get_rSquared(SSR_1, SSTo_1) # 2.589701e-06
+residuals_1 <- get_residuals(x_1, y_1, predictedY_1) # list
+
+plot(x_1, y_1, main="A Beautiful Scatterplot", xlab="x values", ylab="y values", pch=20, cex=0.2)
+abline(b0_1, b1_1, col="red")
+
+plot(x_1, residuals_1, main="Residuals", xlab="x values", ylab="residuals (ei)", pch=20, cex=0.2)
+abline(0,0, col="red")
+#######
+
 set.seed(999)
 x_2 <- rnorm(100000, -100, 100)
 y_2 <- rexp(100000, rate = 0.5)
@@ -244,6 +261,21 @@ abline(b0_3, b1_3, col="red")
 
 plot(x_3, residuals_3, main="Residuals", xlab="x values", ylab="residuals (ei)", pch=20, cex=0.2)
 abline(0,0, col="red")
+
+
+summaryTable <- data.frame(
+  model <- c("Model 1", "Model 2", "Model 3"),
+  b0 <- c(b0_1, b0_2, b0_3),
+  b1 <- c(b1_1, b1_2, b1_3),
+  SSE <- c(SSE_1, SSE_2, SSE_3),
+  SSR <- c(SSR_1, SSR_2, SSR_3),
+  SSTo <- c(SSTo_1, SSTo_2, SSTo_3),
+  stringsAsFactors = FALSE
+)
+
+colnames(summaryTable) <- c("model", "b0", "b1", "SSE", "SSR", "SSTo", "RSquared")
+
+View(summaryTable)
 
 
 # Proof through R's package
