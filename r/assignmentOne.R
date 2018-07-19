@@ -1,4 +1,5 @@
 # Question 1
+# Create the following vectors, populated with information about the four MSAN boot-camp classes, create a table summarizing the type and class for each vector
 courseNum <- c("593", "501", "504", "502")
 courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics", "Linear Algebra")
 courseProf <- c("Paul Intrevado", "Terrence Parr", "Jeff Hamrick", "Xuemei Chen") 
@@ -15,7 +16,7 @@ myMatrix <- matrix(c(names, types, class), nrow=6, ncol=3, byrow=FALSE)
 colnames(myMatrix) <- c("items", "type", "class")
 View(myMatrix)
 
-# make DF
+# Create a data frame called bootcampDataFrame by combining all of the above vectors and create another table summarizing the type and class for the data frame. Do the data frame variables retain their original types/classes?
 bootcampDataFrame <- data.frame(
   courseNum,
   courseName,
@@ -40,6 +41,7 @@ colnames(myMatrix_2) <- c("items", "type", "class")
 
 # no, character in list turns into type integer and type factor in list
 
+# 3. Combine the vectors from 1.1 into a list called bootcampDataList, where each vector is an element of the list. Assign the names of each element to be the names of the original vectors. Do the elements of the list maintain their original types/classes?
 bootcampDataList <- list(
   courseNum,
   courseName,
@@ -60,6 +62,7 @@ for(i in 1:length(names)){
 
 # they do retain their types from the initial matrix, unlike when we did the dataframe
 
+# 4. Write code that returns the following values in code chunks using echo = TRUE so that your code as well as your output is displayed after each calculation:
 # number of hours anticpate spending on coursework, per week
 sum(bootcampDataFrame$anticipatedHours, na.rm=TRUE) #40
 
@@ -82,6 +85,8 @@ printf <- function(...) invisible(print(sprintf(...)))
 
 
 # highest anticipated grade
+
+# 5.If you haven't already, convert the anticipatedGrade variable in bootcampDataFrame into an ordinal factor
 maxGrade <- max(bootcampDataFrame$anticipatedGrade, na.rm=TRUE)
 
 highestCourseName <- toString(bootcampDataFrame[bootcampDataFrame$anticipatedGrade == maxGrade,2])
@@ -92,7 +97,8 @@ typeof(highestCourseName)
 
 printf("MSAN %d : %s", highestCourseNum, highestCourseName)
 
-#### 2
+# =================== Question 2
+# 2.1) Read in the file titanic.csv and store the data in the data frame titanicData.
 setwd("/home/louiselai88gmail/Desktop/programming/USF/courseData")
 titanicData <- read.csv("./titanic.csv", na='\\N')
 titanicData
@@ -100,11 +106,13 @@ titanicData
 library(dplyr)
 library(ggplot2)
 
-# 2.2, 2.3
+# 2.2) How many rows are in this data frame?
 nrow(titanicData)
+
+# 2.3) How many columns are in this data frame?
 ncol(titanicData)
 
-# 2.4
+# 2.4) Which variable has the most NA entries?
 maxNA  = 0
 
 for (i in c(1:ncol(titanicData))) {
@@ -117,7 +125,7 @@ for (i in c(1:ncol(titanicData))) {
 
 print(sum(is.na(titanicData$Age))) # there are 117 NAs for age
 
-# 2.5
+# 2.5) Which variables, if any, should be converted to a different type than the default type they were imported as? Include of list of those you wish to change, what type they were previously, and what type you changed them to.
 for (i in c(1:ncol(titanicData))) {
   print(colnames(titanicData[i]))
   print(class(titanicData[i][1,]))
@@ -130,10 +138,9 @@ View(titanicTypes)
 # survived & sex should be logical (binary), instead of integers, becuase there are only two options
 # Pclass should be a factor with levels, as there is a natural hiearchy for the cabin classes
 
-# 2.5
+# 2.6) If you haven't already, coerce the survived variable into type logical.
 titanicData$survived <- as.logical(titanicData$survived)
 View(titanicData$survived)
-
 
 avgAgeSurvivor <- mean(titanicData$Age[titanicData$Survived==TRUE], na.rm=TRUE) # mean age of survivors = 28.34
 avgAgeNonsurvivor <- mean(titanicData$Age[titanicData$Survived==FALSE], na.rm=TRUE) # mean age of survivors = 30.63
@@ -145,6 +152,7 @@ sum(titanicData$survived==FALSE) # 549
 sum(is.na(titanicData$Survived)) # 0
 sum(titanicData$Name == "")
 View(titanicData)
+
 # plotting histogram 
 hist(titanicData$Age[titanicData$survived == TRUE])
 
@@ -156,7 +164,7 @@ abline(v=avgAgeSurvivor, lwd=4, col="red")
 hist(titanicData$Age[titanicData$survived == FALSE], main ="Age of Non-survivors", xlab="age")
 abline(v=avgAgeNonsurvivor, lwd=4, col="red")
 
-# first ten cabin
+# 2.7) Include the first 10 value of the cabin variable in this deliverable, observing that many are blank. Write and run a script that replaces all blanks in the entire data frame titanicData with NAs.
 View(titanicData$Cabin[1:10])
 
 # could just load the data again, subbing spare "" with NA
@@ -165,48 +173,59 @@ View(titanicData$Cabin[1:10])
 replace(titanicData$Cabin, titanicData$Cabin == "", NA) # adds 687 NAs to Cabin
 replace(titanicData$Embarked, titanicData$Embarked == "", NA)
 
-# count how many NAs
+# 2.8) What percent of the observations for age are NAs? Replace all NAs with the mean age
 percentAgeNA <- 100 * (sum(is.na(titanicData$Age)) / nrow(titanicData))
 percentAgeNA # 19.865%
 
 # replace NAs of age as average age
 titanicData$Age[is.na(titanicData$Age)] <- mean(titanicData$Age, na.rm = TRUE)
+sum(is.na(titanicData$Age)) # 0, shows that no NAs left
 
-sum(is.na(titanicData$Age)) # shows that no NAs left
-
-# Question 3
-distA <- rnorm(100, -1, 1)
-distB <- rnorm(1000, -1, 1)
-distC <- rnorm(10000, -1, 1)
-distD <- rnorm(100000, -1, 1)
-distE <- rnorm(1000000, -1, 1)
+# ======= Question 3
+# 3.1
+distA <- runif(100, -1, 1)
+distA <- runif(100, -1, 1)
+distB <- runif(1000, -1, 1)
+distC <- runif(10000, -1, 1)
+distD <- runif(100000, -1, 1)
+distE <- runif(1000000, -1, 1)
 
 distribution <- list(distA, distB, distC, distD, distE)
 
 sampleSize <- c(100, 1000, 10000, 100000, 1000000)
 
-theoreticalMean <-c(-1, -1, -1)
+# compute mean and variance
+theoreticalMean <-c(0, 0, 0, 0, 0)
 sampleMean <- sapply(distribution, function(x) mean(x))
 deltaMean <- abs(theoreticalMean - sampleMean)
 
-theoreticalVariance <- c(1, 1, 1)
+# create unifDataFrame
+theoreticalVariance <- c(1/3, 1/3, 1/3, 1/3, 1/3)
 sampleVariance <- sapply(distribution, function(x) var(x))
 deltaVariance <- abs(theoreticalVariance - sampleVariance)
 
 unifDataFrame <- data.frame(sampleSize, theoreticalMean, sampleMean, deltaMean, theoreticalVariance, sampleVariance, deltaVariance)
+
+# plot sampleSize v deltaMean
 attach(unifDataFrame)
 plot(sampleSize, deltaMean)
 lines(lowess(deltaMean ~ sampleSize), col="black")
 
+# plot sampleSize v deltaVariance
 plot(sampleSize, deltaVariance)
 lines(lowess(deltaVariance ~ sampleSize), col="black")
 
-# 3.3
-runIfVector <- rnorm(10000000, 0, 1)
-samples <- sample(runIfVector, 100000)
-# need to generate variances
+# 3.2)
+myRunifVec <- runif(10000000, 0, 1)
+samples <- sample(myRunifVec, 100000)
+hist(samples, main="Histogram of myRunifVec")
 
-# Question 4
+# 3.3 and 3.4 omitted
+
+
+# =================== Question 4
+
+# 4.1) Manually compute the coefficients for the simple linear regression
 # calculate b1 (slope)
 get_b1 <- function(x_list, y_list){
   x_hat <- mean(x_list)
@@ -237,8 +256,7 @@ summary(rFunction)
 plot(resid(rFunction) ~ fitted(rFunction))
 plot(x_1, y_1)
 
-# Q4.2
-
+# 4.2) Manually compute SSE, SSR, SSTO and compute the simple coefficient of determination
 # generate predicted Y values from x values, using regression formula (i.e. coefficients found above)
 get_predicted_y_values <- function(x_list, b0, b1){ # might break due to variable overlap b0 b1
   predictedY = c()
@@ -256,7 +274,7 @@ get_SSE <- function(x_list, y_list, predictedY){
   SSE # 396,806.1
 }
 
-print(get_SSE(x_1, y_1, predictedY)) # works
+print(get_SSE(x_1, y_1, predictedY))
 
 get_SSTo <- function(x_list, y_list){
   SSTo = 0.0
@@ -266,13 +284,12 @@ get_SSTo <- function(x_list, y_list){
   } 
   return(SSTo) # 396,806.3
 }
-# works
 
 get_SSR <- function(SSTo, SSE){
   return(SSTo-SSE) # 0.19497
 }
 
-print(get_SSR(get_SSTo(x_1, y_1), get_SSE(x_1, y_1, predictedY))) # works
+print(get_SSR(get_SSTo(x_1, y_1), get_SSE(x_1, y_1, predictedY)))
 
 # calucluate R-squared
 get_rSquared <- function(SSR, SSTo){

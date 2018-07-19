@@ -7,19 +7,42 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(xtable.type = 'html')
 ```
 
-```{r}
+# Q1
+1. Create the following vectors, populated with information about the four MSAN boot-camp classes
+```{r, echo=TRUE}
 courseNum <- c("593", "501", "504", "502")
-courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics")
+courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics", "Linear Algebra")
 courseProf <- c("Paul Intrevado", "Terrence Parr", "Jeff Hamrick", "Xuemei Chen") 
 enrolled <- c(1, 1, 1, 0)
 anticipatedGrade <- c("A", "A", "B", NA)
 anticipatedHours <- c(15, 10, 15, NA)
 ```
 
+Table summarizing type and class for each vector
+```{r, echo=TRUE, results='asis'}
 
-```{r}
-titanicData <- read.csv("titanic.csv", na='\\N')
+# make Matrix
+names <- c("courseNum", "courseName", "courseProf", "enrolled", "anticipatedGrade", "anticipatedHours")
+types <- c(typeof(courseNum), typeof(courseName), typeof(courseProf), typeof(enrolled), typeof(anticipatedGrade), typeof(anticipatedHours))
+class <- c(class(courseNum), class(courseName), class(courseProf), class(enrolled), class(anticipatedGrade), class(anticipatedHours))
+
+myMatrix <- matrix(c(names, types, class), nrow=6, ncol=3, byrow=FALSE)
+colnames(myMatrix) <- c("items", "type", "class")
+
+# make DF
+bootcampDataFrame <- data.frame(
+  courseNum,
+  courseName,
+  courseProf,
+  enrolled,
+  anticipatedGrade,
+  anticipatedHours
+)
+
+
 ```
+
 
