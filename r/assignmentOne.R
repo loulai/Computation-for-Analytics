@@ -3,7 +3,7 @@ courseNum <- c("593", "501", "504", "502")
 courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics", "Linear Algebra")
 courseProf <- c("Paul Intrevado", "Terrence Parr", "Jeff Hamrick", "Xuemei Chen") 
 enrolled <- as.logical(c(1, 1, 1, 0))
-anticipatedGrade <- c("A", "A", "B", NA)
+anticipatedGrade <- c("A", "C", "B", NA)
 anticipatedHours <- c(15, 10, 15, NA)
 
 # make Matrix
@@ -40,7 +40,7 @@ colnames(myMatrix_2) <- c("items", "type", "class")
 
 # no, character in list turns into type integer and type factor in list
 
-bootcampList <- list(
+bootcampDataList <- list(
   courseNum,
   courseName,
   courseProf,
@@ -49,7 +49,7 @@ bootcampList <- list(
   anticipatedHours
 )
 
-names(bootcampList) <- names
+names(bootcampDataList) <- names
 types_3 <- c()
 class_3 <- c()
 
@@ -69,8 +69,31 @@ sum(bootcampDataFrame$anticipatedHours, na.rm=TRUE) * 5 #200
 # data frame with onlt the third row and first two columns of `bootcampDataFrame`
 bootcampDataFrame[3,1:2]
 
-####
+# the first value in the second element of bootcampDataList
+bootcampDataList[[2]][1]
+View(bootcampDataList)
 
+bootcampDataFrame$anticipatedGrade <- factor(bootcampDataFrame$anticipatedGrade, levels=c("C", "B", "A"), na.rm=TRUE, order=TRUE)
+bootcampDataFrame$anticipatedGrade
+
+View(bootcampDataFrame)
+
+printf <- function(...) invisible(print(sprintf(...)))
+
+
+# highest anticipated grade
+maxGrade <- max(bootcampDataFrame$anticipatedGrade, na.rm=TRUE)
+
+highestCourseName <- toString(bootcampDataFrame[bootcampDataFrame$anticipatedGrade == maxGrade,2])
+highestCourseNum <- bootcampDataFrame[bootcampDataFrame$anticipatedGrade==maxGrade,1]
+
+typeof(highestCourseNum) # works but weird NA stuff
+typeof(highestCourseName)
+
+printf("MSAN %d : %s", highestCourseNum, highestCourseName)
+
+#### 2
+setwd("/home/louiselai88gmail/Desktop/programming/USF/courseData")
 titanicData <- read.csv("./titanic.csv", na='\\N')
 titanicData
 
@@ -92,23 +115,25 @@ for (i in c(1:ncol(titanicData))) {
   }
 }
 
+print(sum(is.na(titanicData$Age))) # there are 117 NAs for age
+
 # 2.5
 for (i in c(1:ncol(titanicData))) {
   print(colnames(titanicData[i]))
   print(class(titanicData[i][1,]))
 }
 
-# survived should be logical (binary), becuase there are only two options
-# Pclass should be
-# come back!
-# survived is an integer originally
+View(titanicData)
+titanicTypes <- sapply(titanicData, typeof)
+View(titanicTypes)
+
+# survived & sex should be logical (binary), instead of integers, becuase there are only two options
+# Pclass should be a factor with levels, as there is a natural hiearchy for the cabin classes
 
 # 2.5
-titanicData$survived <- as.logical(titanicData$Survived)
-class(titanicData$survived)
+titanicData$survived <- as.logical(titanicData$survived)
+View(titanicData$survived)
 
-print(sum(is.na(titanicData$Age))) # note there are 117 NAs for age, but none for Survived
-print(sum(is.na(titanicData$Survived)))
 
 avgAgeSurvivor <- mean(titanicData$Age[titanicData$Survived==TRUE], na.rm=TRUE) # mean age of survivors = 28.34
 avgAgeNonsurvivor <- mean(titanicData$Age[titanicData$Survived==FALSE], na.rm=TRUE) # mean age of survivors = 30.63
@@ -118,8 +143,9 @@ View(titanicData$Age[titanicData$Survived==TRUE])
 sum(titanicData$survived==TRUE) # 342
 sum(titanicData$survived==FALSE) # 549
 sum(is.na(titanicData$Survived)) # 0
-
-# plotting histogram
+sum(titanicData$Name == "")
+View(titanicData)
+# plotting histogram 
 hist(titanicData$Age[titanicData$survived == TRUE])
 
 attach(titanicData)
@@ -136,15 +162,17 @@ View(titanicData$Cabin[1:10])
 # could just load the data again, subbing spare "" with NA
 # data <- read.csv("data.csv", na.strings="")
 # but we won't do that becuase we don't want to reload file
-titanicData$Cabin <- as.character(titanicData$Cabin)
-class(titanicData$Cabin)
-titanicData[titanicData==""] <-  # adds 687 NAs to Cabin
+replace(titanicData$Cabin, titanicData$Cabin == "", NA) # adds 687 NAs to Cabin
+replace(titanicData$Embarked, titanicData$Embarked == "", NA)
 
 # count how many NAs
-for (i in c(1:ncol(titanicData))) {
-    print(colnames(titanicData[i]))
-    print(sum(is.na(titanicData[i])))
-}
+percentAgeNA <- 100 * (sum(is.na(titanicData$Age)) / nrow(titanicData))
+percentAgeNA # 19.865%
+
+# replace NAs of age as average age
+titanicData$Age[is.na(titanicData$Age)] <- mean(titanicData$Age, na.rm = TRUE)
+
+sum(is.na(titanicData$Age)) # shows that no NAs left
 
 # Question 3
 distA <- rnorm(100, -1, 1)
