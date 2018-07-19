@@ -1,3 +1,76 @@
+# Question 1
+courseNum <- c("593", "501", "504", "502")
+courseName <- c("Exploratory Data Analysis", "Computation for Analytics", "Review of Probability and Statistics", "Linear Algebra")
+courseProf <- c("Paul Intrevado", "Terrence Parr", "Jeff Hamrick", "Xuemei Chen") 
+enrolled <- as.logical(c(1, 1, 1, 0))
+anticipatedGrade <- c("A", "A", "B", NA)
+anticipatedHours <- c(15, 10, 15, NA)
+
+# make Matrix
+names <- c("courseNum", "courseName", "courseProf", "enrolled", "anticipatedGrade", "anticipatedHours")
+types <- c(typeof(courseNum), typeof(courseName), typeof(courseProf), typeof(enrolled), typeof(anticipatedGrade), typeof(anticipatedHours))
+class <- c(class(courseNum), class(courseName), class(courseProf), class(enrolled), class(anticipatedGrade), class(anticipatedHours))
+
+myMatrix <- matrix(c(names, types, class), nrow=6, ncol=3, byrow=FALSE)
+colnames(myMatrix) <- c("items", "type", "class")
+View(myMatrix)
+
+# make DF
+bootcampDataFrame <- data.frame(
+  courseNum,
+  courseName,
+  courseProf,
+  enrolled,
+  anticipatedGrade,
+  anticipatedHours
+)
+
+View(bootcampDataFrame)
+
+types_2 <-  c()
+class_2 <-  c()
+
+for(i in 1:length(names)){
+  types_2[i] <- typeof(bootcampDataFrame[,i])
+  class_2[i] <- class(bootcampDataFrame[,i])
+}
+
+myMatrix_2 <- matrix(c(names, types_2, class_2), nrow=6, ncol=3, byrow=FALSE)
+colnames(myMatrix_2) <- c("items", "type", "class")
+
+# no, character in list turns into type integer and type factor in list
+
+bootcampList <- list(
+  courseNum,
+  courseName,
+  courseProf,
+  enrolled,
+  anticipatedGrade,
+  anticipatedHours
+)
+
+names(bootcampList) <- names
+types_3 <- c()
+class_3 <- c()
+
+for(i in 1:length(names)){
+  types_3[i] <- typeof(bootcampList[[i]])
+  class_3[i] <- class(bootcampList[[i]])
+}
+
+# they do retain their types from the initial matrix, unlike when we did the dataframe
+
+# number of hours anticpate spending on coursework, per week
+sum(bootcampDataFrame$anticipatedHours, na.rm=TRUE) #40
+
+# number of hours anticpate spending on coursework, over all bootcamp
+sum(bootcampDataFrame$anticipatedHours, na.rm=TRUE) * 5 #200
+
+# data frame with onlt the third row and first two columns of `bootcampDataFrame`
+bootcampDataFrame[3,1:2]
+
+####
+
 titanicData <- read.csv("./titanic.csv", na='\\N')
 titanicData
 
